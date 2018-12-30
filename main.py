@@ -1,30 +1,35 @@
 import pickle
 import sys
-from bawiBot.bawiBot import *
+from weddingDayBot.weddingDayBot import *
 import time
 
-boardList, readPostsIdSet = "", ""
+checkMonth = ["2019", "9"]
 
-def run(uid, passwd, slackToken):
-    global boardList, readPostsIdSet
-    
-    # Load the Read List 
-    boardList = pickle.load(open("boardList.pkl", "br"))
-    readPostsIdSet = pickle.load(open("readPostsIdSet.pkl", "br"))
+checkList = [["9/7", "14:00"]
+    ,["9/7", "14:00"]
+    ,["9/8", "14:00"]
+    ,["9/27", "14:00"]
+    ,["9/28", "14:00"]
+]
+
+def run(slackToken, showAll=False):
+    global checkMonth, checkList, dateIndexMap 
     
     # Run the agent
-    driver = getBawiDriver(uid, passwd)
-    checkNewPosts(driver, boardList, readPostsIdSet, slackToken)
+    driver = getWeddingDayDriver()
+
+    checkNewPosts(driver, checkMonth, checkList, slackToken, showAll)
     driver.quit()
     
-    # Write the Read List
-    pickle.dump(boardList, open("boardList.pkl", "wb"))
-    pickle.dump(readPostsIdSet, open("readPostsIdSet.pkl", "wb"))
-    
 if __name__ == "__main__":
-	if len(sys.argv) < 4:
-		print("usage : python main.py [bawiId] [bawiPasswd] [slackbotToken]")
-		exit()
-	
-	run(sys.argv[1], sys.argv[2], sys.argv[3])
-	sendSlackMsgSimple(sys.argv[3], "#test", "CHECKED "+time.strftime("%Y-%m-%d %l:%M%p %Z"))                                                                                                                   
+    if len(sys.argv) < 2:
+        print("usage : python main.py [slackbotToken] [showAllCheck]")
+        exit()
+
+    if len(sys.argv) >= 3 and sys.argv[2] == "Y":
+        showAll = True
+    else:
+        showAll = False
+
+    run(sys.argv[1], showAll)
+    sendSlackMsgSimple(sys.argv[1], "#test", "CHECKED "+time.strftime("%Y-%m-%d %l:%M%p %Z"))                                                                                                                   
