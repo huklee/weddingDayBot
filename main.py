@@ -7,11 +7,11 @@ from datetime import datetime
 
 checkMonth = ["2019", "9"]
 
-checkList = [["9/7", "14:00"]
-    ,["9/7", "14:00"]
+checkList = [
+    ["9/7", "14:00"]
     ,["9/8", "14:00"]
-    ,["9/27", "14:00"]
     ,["9/28", "14:00"]
+    ,["9/29", "14:00"]
 ]
 
 def run(slackToken, showAll=False):
